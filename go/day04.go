@@ -9,48 +9,50 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"./util"
 )
 
 type Card struct {
-	board [][]int
-	marks [][]bool
-	rowsum []int
-	colsum []int
+	Board [][]int
+	Marks [][]bool
+	RowSum []int
+	ColSum []int
 }
 
 func NewCard() Card {
 	card := Card{}
-	card.board = make([][]int, 5)
-	card.marks = make([][]bool, 5)
+	card.Board = make([][]int, 5)
+	card.Marks = make([][]bool, 5)
 	for i := 0; i<5; i++ {
-		card.board[i] = make([]int, 5)
-		card.marks[i] = make([]bool, 5)
+		card.Board[i] = make([]int, 5)
+		card.Marks[i] = make([]bool, 5)
 	}
-	card.rowsum = make([]int, 5)
-	card.colsum = make([]int, 5)
+	card.RowSum = make([]int, 5)
+	card.ColSum = make([]int, 5)
 
 	return card
 }
 
-func (card *Card) reset() {
+func (card *Card) Reset() {
 	for i := 0; i<5; i++ {
-		card.rowsum[i] = 0
+		card.RowSum[i] = 0
 		for j := 0; j<5; j++ {
-			card.marks[i][j] = false 
+			card.Marks[i][j] = false 
 			// This is done 5x because lazy
-			card.colsum[j] = 0 
+			card.ColSum[j] = 0 
 		}
 	}
 }
 
-func (card *Card) mark(v int) (bool, bool) {
+func (card *Card) Mark(v int) (bool, bool) {
 	for i := 0; i<5; i++ {
 		for j := 0; j<5; j++ {
-			if card.board[i][j] == v {
-				card.marks[i][j] = true
-				card.rowsum[i]++
-				card.colsum[j]++
-				if card.rowsum[i] == 5 || card.colsum[j] == 5 {
+			if card.Board[i][j] == v {
+				card.Marks[i][j] = true
+				card.RowSum[i]++
+				card.ColSum[j]++
+				if card.RowSum[i] == 5 || card.ColSum[j] == 5 {
 					return true, true
 				}
 				return true, false
@@ -59,29 +61,16 @@ func (card *Card) mark(v int) (bool, bool) {
 	}
 	return false, false
 }
-func (card *Card) unmarked_sum() int {
+func (card *Card) UnmarkedSum() int {
 	t := 0
 	for i := 0; i<5; i++ {
 		for j := 0; j<5; j++ {
-			if !card.marks[i][j] {
-				t += card.board[i][j]
+			if !card.Marks[i][j] {
+				t += card.Board[i][j]
 			}
 		}
 	}
 	return t
-}
-
-func get_ints(line string, sep string) []int {
-	vals := strings.Split(line, sep)
-	ints := make([]int, len(vals))
-	for i, val := range vals {
-		v, err := strconv.Atoi(val)
-		if err != nil {
-			log.Panic(err)
-		}
-		ints[i] = v
-	}
-	return ints
 }
 
 func main() {
@@ -108,13 +97,13 @@ func main() {
 	for i := 0; scanner.Scan(); i++ {
 		line := scanner.Text()
 		if i == 0 {
-			numbers = get_ints(line, ",")
+			numbers = util.GetInts(line, ",")
 		} else if strings.TrimSpace(line) == "" {
 			curcard = NewCard()
 			currow = 0
 			cards = append(cards, curcard)
 		} else {
-			row := curcard.board[currow]
+			row := curcard.Board[currow]
 			for ri := 0; ri<5; ri++ { 
 				j := ri * 3
 				k := j+2
@@ -139,8 +128,8 @@ func main() {
 	winning_sum := -1
 	for _, num := range numbers {
 		for _, card := range cards {
-			if _, winner := card.mark(num); winner {
-				winning_sum = card.unmarked_sum()*num
+			if _, winner := card.Mark(num); winner {
+				winning_sum = card.UnmarkedSum()*num
 				break
 			}
 		}
@@ -152,7 +141,7 @@ func main() {
 
 	t2 := time.Now()
 	for _, card := range cards {
-		card.reset()
+		card.Reset()
 	}
 	won := make([]bool, len(cards))
 	remain := len(cards)
@@ -163,11 +152,11 @@ func main() {
 			if won[i] {
 				continue
 			}
-			if _, winner := card.mark(num); winner {
+			if _, winner := card.Mark(num); winner {
 				won[i] = true
 				remain--
 				if remain == 0 {
-					winning_sum = card.unmarked_sum()*num
+					winning_sum = card.UnmarkedSum()*num
 					continue
 				}
 			}

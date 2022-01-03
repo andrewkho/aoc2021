@@ -8,9 +8,9 @@ import (
 	"time"
 )
 
-type Instruction struct {
-	dir string
-	steps int
+type Instr struct {
+	Dirn string
+	Steps int
 }
 
 type Position struct {
@@ -28,7 +28,7 @@ func main() {
 	}
 	defer file.Close()
 
-	var instructions []Instruction
+	var instrs []Instr
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		var dir string
@@ -36,7 +36,7 @@ func main() {
 		if _, err := fmt.Sscanf(scanner.Text(), "%s %d", &dir, &steps); err != nil {
 			log.Fatal(err)
 		} else {
-			instructions = append(instructions, Instruction{dir, steps})
+			instrs = append(instrs, Instr{dir, steps})
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -47,13 +47,13 @@ func main() {
 
 	t1 := time.Now()
 	pos := Position{0, 0}
-	for _, inst := range instructions {
-		if inst.dir == "forward" {
-			pos.x += inst.steps
-		} else if inst.dir == "down" {
-			pos.y += inst.steps
-		} else if inst.dir == "up" {
-			pos.y -= inst.steps
+	for _, instr := range instrs {
+		if instr.Dirn == "forward" {
+			pos.x += instr.Steps
+		} else if instr.Dirn == "down" {
+			pos.y += instr.Steps
+		} else if instr.Dirn == "up" {
+			pos.y -= instr.Steps
 		}
 	}
 	fmt.Printf("1: %v, %v\n", pos.x*pos.y, time.Since(t1))
@@ -61,14 +61,14 @@ func main() {
 	t2 := time.Now()
 	aim := 0
 	pos = Position{0, 0}
-	for _, inst := range instructions {
-		if inst.dir == "forward" {
-			pos.x += inst.steps
-			pos.y += aim * inst.steps
-		} else if inst.dir == "down" {
-			aim += inst.steps
-		} else if inst.dir == "up" {
-			aim -= inst.steps
+	for _, inst := range instrs {
+		if inst.Dirn == "forward" {
+			pos.x += inst.Steps
+			pos.y += aim * inst.Steps
+		} else if inst.Dirn == "down" {
+			aim += inst.Steps
+		} else if inst.Dirn == "up" {
+			aim -= inst.Steps
 		}
 	}
 
