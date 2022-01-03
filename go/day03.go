@@ -9,16 +9,6 @@ import (
 	"time"
 )
 
-type Instruction struct {
-	dir string
-	steps int
-}
-
-type Position struct {
-	x int
-	y int
-}
-
 func main() {
 	var filename string = os.Args[1]
 	t0 := time.Now()
