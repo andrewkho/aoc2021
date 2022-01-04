@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"runtime/debug"
+	"sort"
 	"time"
 
 	"./util"
@@ -28,11 +29,12 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
+	var ints []int
 	dists := make(map[int]int)
 	mindist := 1<<62
 	maxdist := 0
 	for scanner.Scan() {
-		ints := util.GetInts(scanner.Text(), ",")
+		ints = util.GetInts(scanner.Text(), ",")
 		for _, i := range ints {
 			dists[i]++
 			if i < mindist {
@@ -49,34 +51,40 @@ func main() {
 	fmt.Printf(" took %v\n", time.Since(t0))
 
 	t1 := time.Now()
-	t := 1 << 62
-	for i := mindist; i<maxdist; i++ {
-		c := 0
-		for k, v := range dists {
-			c += v*util.Abs(k-i)
-		}
-		if c < t {
-			t = c
-		} else {
-			break
-		}
-
+	sort.Ints(ints)
+	med := ints[len(ints)/2]
+	t := 0
+	for k, v := range dists {
+		t += v*util.Abs(k - med)
 	}
 	fmt.Printf("1: %v, %v\n", t, time.Since(t1))
 
 	t2 := time.Now()
-	t = 1 << 62
-	for i := mindist; i<maxdist; i++ {
+	cost := func(p int) int {
 		c := 0
 		for k, v := range dists {
-			d := util.Abs(k-i)
+			d := util.Abs(k-p)
 			c += v*d*(d+1)/2
 		}
-		if c < t {
-			t = c
-		} else {
-			break
-		}
+		return c
 	}
+	srch := func() int {
+		l := ints[0]
+		r := ints[len(ints)-1]
+
+		for l < r {
+			m := l + (r-l)/2
+			cl := cost(m-1)
+			cm := cost(m)
+			if cm < cl { // want to move left up
+				l = m
+			} else {
+				r = m-1
+			}
+		}
+		return l
+	}
+
+	t = cost(srch())
 	fmt.Printf("2: %v, %v\n", t, time.Since(t2))
 }
