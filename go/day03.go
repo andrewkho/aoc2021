@@ -51,13 +51,13 @@ func main() {
 	fmt.Printf("1: %v, %v\n", g*e, time.Since(t1))
 
 	t2 := time.Now()
-	o2, err := compute_vals(lines, false)
-	co2, err := compute_vals(lines, true)
+	o2, err := computeVals(lines, false)
+	co2, err := computeVals(lines, true)
 
 	fmt.Printf("2: %v, %v, %v, %v\n", o2*co2, o2, co2, time.Since(t2))
 }
 
-func compute_vals(lines []string, co2 bool) (int, error) {
+func computeVals(lines []string, co2 bool) (int, error) {
 	includes := map[int]bool{}
 	for i := 0; i<len(lines); i++ {
 		includes[i] = true
@@ -71,12 +71,12 @@ func compute_vals(lines []string, co2 bool) (int, error) {
 				b++
 			}
 		}
-		var c byte = '1'
+		c := '1'
 		if b >= len(includes) / 2 {
 			c = '0'
 		}
 		for k := range includes {
-			if (!co2 && lines[k][i] == c) || (co2 && lines[k][i] != c) {
+			if (!co2 && rune(lines[k][i]) == c) || (co2 && rune(lines[k][i]) != c) {
 				delete(includes, k)
 			}	
 		}
