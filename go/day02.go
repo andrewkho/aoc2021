@@ -43,7 +43,7 @@ func main() {
 	fmt.Printf(" took %v\n", time.Since(t0))
 
 	t1 := time.Now()
-	pos := util.Point{0, 0}
+	pos := util.Point2D{}
 	for _, instr := range instrs {
 		if instr.dirn == "forward" {
 			pos.X += instr.steps
@@ -57,7 +57,7 @@ func main() {
 
 	t2 := time.Now()
 	aim := 0
-	pos = util.Point{0, 0}
+	pos = util.Point2D{}
 	for _, inst := range instrs {
 		if inst.dirn == "forward" {
 			pos.X += inst.steps
