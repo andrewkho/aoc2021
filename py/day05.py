@@ -3,6 +3,7 @@ from typing import *
 import numpy as np
 import itertools
 import re
+import time
 
 import fire
 
@@ -42,7 +43,7 @@ def main(
 
     print(max_x, max_y)
     arr = np.zeros((max_y, max_x), dtype=np.int32)
-
+    t0 = time.time()
     for line in lines:
         if line.l.x == line.r.x:
             y0 = min(line.l.y, line.r.y)
@@ -71,8 +72,7 @@ def main(
             for j in range(abs(x1-x0)+1):
                 arr[y0+j*dy, x0+j*dx] += 1
 
-    print(arr)
-    print(f'1: {(arr>1).sum()}')
+    print(f'1: {(arr>1).sum()}', time.time() - t0, 's')
 
 
 if __name__ == '__main__':
