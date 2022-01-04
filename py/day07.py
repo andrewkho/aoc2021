@@ -3,6 +3,7 @@ from typing import *
 import numpy as np
 import itertools
 import re
+import time
 
 import fire
 
@@ -17,16 +18,17 @@ def main(
         input = [int(x) for x in f.readlines()[0].split(',')]
 
     input = sorted(input)
-    print(input)
 
     def cost(x):
         return sum(abs(i-x) for i in input)
 
+    t0 = time.time()
     med = np.median(input)
-    print(f'1: {med}, {cost(med)}')
+    print(f'1: {med}, {cost(med)}', time.time() - t0, 's')
 
+    t1 = time.time()
     med2 = binsearch(input, cost)
-    print(f'1: {med2}, {cost(med2)}')
+    print(f'1: {med2}, {cost(med2)}', time.time() - t1, 's')
 
     def cost2(x):
         # sum(range(N)) = N*(N+1)/2
