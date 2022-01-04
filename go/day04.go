@@ -14,7 +14,7 @@ import (
 )
 
 type Card struct {
-	Board [][]int
+	Board util.Array2D
 	Marks [][]bool
 	RowSum []int
 	ColSum []int
@@ -22,7 +22,8 @@ type Card struct {
 
 func NewCard() Card {
 	card := Card{}
-	card.Board = make([][]int, 5)
+	card.Board = util.New2DZeros(5, 5)
+
 	card.Marks = make([][]bool, 5)
 	for i := 0; i<5; i++ {
 		card.Board[i] = make([]int, 5)
