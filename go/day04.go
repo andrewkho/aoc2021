@@ -126,17 +126,16 @@ func main() {
 
 	t1 := time.Now()
 	winning_sum := -1
-	for _, num := range numbers {
-		for _, card := range cards {
-			if _, winner := card.Mark(num); winner {
-				winning_sum = card.UnmarkedSum()*num
-				break
+
+	Bingo:
+		for _, num := range numbers {
+			for _, card := range cards {
+				if _, winner := card.Mark(num); winner {
+					winning_sum = card.UnmarkedSum()*num
+					break Bingo
+				}
 			}
 		}
-		if winning_sum >= 0 {
-			break
-		}
-	}
 	fmt.Printf("1: %v, %v\n", winning_sum, time.Since(t1))
 
 	t2 := time.Now()
@@ -147,23 +146,22 @@ func main() {
 	remain := len(cards)
 	winning_sum = -1
 	var num int
-	for _, num = range numbers {
-		for i, card := range cards {
-			if won[i] {
-				continue
-			}
-			if _, winner := card.Mark(num); winner {
-				won[i] = true
-				remain--
-				if remain == 0 {
-					winning_sum = card.UnmarkedSum()*num
+
+	LastBingo:
+		for _, num = range numbers {
+			for i, card := range cards {
+				if won[i] {
 					continue
+				}
+				if _, winner := card.Mark(num); winner {
+					won[i] = true
+					remain--
+					if remain == 0 {
+						winning_sum = card.UnmarkedSum()*num
+						break LastBingo
+					}
 				}
 			}
 		}
-		if winning_sum >= 0 {
-			break
-		}
-	}
 	fmt.Printf("2: %v, %v, %v\n", winning_sum, num, time.Since(t2))
 }
