@@ -6,6 +6,7 @@ from typing import *
 import numpy as np
 import itertools
 import re
+import time
 
 import fire
 
@@ -19,14 +20,11 @@ class Node:
         self.edges: List['Node'] = list()
 
 
-def main(
-        infile: str='test_input.txt',
-        #infile: str = 'input.txt',
-):
+def main(infile: str):
     print('hi!')
 
     nodes = dict()
-    with open(f'../inputs/day12/{infile}', 'r') as f:
+    with open(infile, 'r') as f:
         for line in f.readlines():
             l, r = line.strip().split('-')
             for x in [l, r]:
@@ -36,8 +34,8 @@ def main(
             nodes[l].edges.append(nodes[r])
             nodes[r].edges.append(nodes[l])
 
+    t0 = time.time()
     visited = set()
-
     def recurse(node):
         if node.name == 'end':
             return 1
@@ -54,8 +52,9 @@ def main(
         return paths
 
     paths = recurse(nodes['start'])
-    print(f'1: {paths}')
+    print(f'1: {paths}', time.time() - t0, 's')
 
+    t1 = time.time()
     vc = defaultdict(lambda: 0)
     vc['start'] = 2
 
@@ -67,11 +66,11 @@ def main(
             vc[node.name] += 1
 
         paths = 0
+        if any(x == 2 for x in vc.values()):
+            max = 1
+        else:
+            max = 2
         for edge in node.edges:
-            if any(x == 2 for x in vc.values()):
-                max = 1
-            else:
-                max = 2
             if vc[edge.name] >= max:
                 continue
             paths += recurse(edge)
@@ -81,7 +80,7 @@ def main(
         return paths
 
     paths = recurse(nodes['start'])
-    print(f'2: {paths}')
+    print(f'2: {paths}', time.time() - t1, 's')
 
 
 if __name__ == '__main__':
