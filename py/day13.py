@@ -6,19 +6,17 @@ from typing import *
 import numpy as np
 import itertools
 import re
+import time
 
 import fire
 
 
-def main(
-        #infile: str='test_input.txt',
-        infile: str = 'input.txt',
-):
+def main(infile: str):
     print('hi!')
 
     points = list()
     folds = list()
-    with open(f'../inputs/day13/{infile}', 'r') as f:
+    with open(infile, 'r') as f:
         part2 = False
         for line in f.readlines():
             if len(line.strip()) == 0:
@@ -39,10 +37,12 @@ def main(
     for pt in points:
         grid[pt] += 1
 
+    t0 = time.time()
     grid = fold(grid, folds[0])
 
-    print(f'1: {(grid > 0).sum()}')
+    print(f'1: {(grid > 0).sum()}', time.time() - t0, 's')
 
+    t1 = time.time()
     for fld in folds[1:]:
         grid = fold(grid, fld)
 
@@ -52,6 +52,7 @@ def main(
             l.append('#' if grid[i, j] > 0 else ' ')
         print(''.join(l))
 
+    print(f'2:', time.time() - t1, 's')
 
 def fold(grid, instr):
     axis, loc = instr
