@@ -2,6 +2,7 @@ import math
 from dataclasses import dataclass
 from collections import deque, defaultdict, Counter
 from typing import *
+import time
 
 import numpy as np
 import itertools
@@ -10,15 +11,12 @@ import re
 import fire
 
 
-def main(
-        #infile: str='test_input.txt',
-        infile: str = 'input.txt',
-):
+def main(infile: str):
     print('hi!')
 
     instr = dict()
     base = ''
-    with open(f'../inputs/day14/{infile}', 'r') as f:
+    with open(infile, 'r') as f:
         for i, line in enumerate(f.readlines()):
             if i == 0:
                 base = line.strip()
@@ -50,19 +48,21 @@ def main(
 
         return new_matches, c
 
+    t0 = time.time()
     for i in range(10):
         matches, c = step(matches, c)
 
     mn = min(c.values())
     mx = max(c.values())
-    print('1:', mn, mx, mx-mn)
-
+    print('1:', mn, mx, mx-mn, time.time() - t0, 's')
+    
+    t1 = time.time()
     for i in range(30):
         matches, c = step(matches, c)
 
     mn = min(c.values())
     mx = max(c.values())
-    print('2:', mn, mx, mx-mn)
+    print('2:', mn, mx, mx-mn, time.time() - t1, 's')
     print('2: sum(values)', sum(c.values())/1024/1024/1024/1024, 'TB')
 
 
