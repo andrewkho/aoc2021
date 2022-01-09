@@ -90,7 +90,7 @@ func srch(risks util.Array2D) int {
 	dist := util.New2DZeros(N, M)
 	for i := 0; i<N; i++ {
 		for j := 0; j<M; j++ {
-			dist[i][j] = 1<<62
+			dist[i][j] = 1<<63-1
 		}
 	}
 	dist[start.Y][start.X] = 0

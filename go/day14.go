@@ -71,7 +71,7 @@ func main() {
 	for i := 0; i<steps; i++ {
 		pairs = step(pairs, counts)
 	}
-	min, max := 1<<62, 0
+	min, max := 1<<63-1, 0
 	for _, v := range counts {
 		if v < min {
 			min = v
@@ -86,7 +86,7 @@ func main() {
 	for i := steps; i<40; i++ {
 		pairs = step(pairs, counts)
 	}
-	min, max = 1<<62, 0
+	min, max = 1<<63-1, 0
 	for _, v := range counts {
 		if v < min {
 			min = v

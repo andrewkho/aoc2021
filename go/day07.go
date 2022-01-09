@@ -31,7 +31,7 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	var ints []int
 	dists := make(map[int]int)
-	mindist := 1<<62
+	mindist := 1<<63-1
 	maxdist := 0
 	for scanner.Scan() {
 		ints = util.GetInts(scanner.Text(), ",")
