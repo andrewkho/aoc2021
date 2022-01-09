@@ -3,6 +3,7 @@ import math
 from dataclasses import dataclass
 from collections import deque, defaultdict, Counter
 from typing import *
+import time
 
 import numpy as np
 import itertools
@@ -11,23 +12,22 @@ import re
 import fire
 
 
-def main(
-        #infile: str='test_input.txt',
-        infile: str = 'input.txt',
-):
+def main(infile: str):
     print('hi!')
 
-    with open(f'../inputs/day16/{infile}', 'r') as f:
+    with open(infile, 'r') as f:
         for i, line in enumerate(f.readlines()):
             input = line.strip()
 
+    t0 = time.time()
     input_bin = bin(int(input, 16))[2:]
     if len(input_bin) % 4 > 0:
         input_bin = '0'*(4-len(input_bin) % 4) + input_bin
 
     parsed, _ = parse(input_bin)
-    print(f'1: {parsed.get_version_sum()}')
-    print(f'2: {parsed.get_value()}')
+    print(f'1: {parsed.get_version_sum()}', time.time() - t0, 's')
+    t1 = time.time()
+    print(f'2: {parsed.get_value()}', time.time() - t1, 's')
 
 
 @dataclass
