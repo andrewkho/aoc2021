@@ -12,14 +12,11 @@ import re
 import fire
 
 
-def main(
-        #infile: str='test_input.txt',
-        infile: str = 'input.txt',
-):
+def main(infile: str):
     print('hi!')
 
     pts = []
-    with open(f'../inputs/day19/{infile}', 'r') as f:
+    with open(infile, 'r') as f:
         pt = None
         for line in f.readlines():
             if len(line.strip()) == 0:
