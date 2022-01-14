@@ -13,14 +13,11 @@ import re
 import fire
 
 
-def main(
-        #infile: str='test_input.txt',
-        infile: str = 'input.txt',
-):
+def main(infile: str):
     print('hi!')
 
     img = []
-    with open(f'../inputs/day20/{infile}', 'r') as f:
+    with open(infile, 'r') as f:
         for i, line in enumerate(f.readlines()):
             if i == 0:
                 code = [1 if x == '#' else 0 for x in line.strip()]
@@ -35,8 +32,6 @@ def main(
     t0 = time.time()
     for i in range(2):
         img = conv(img, code, fill=i % 2 if code[0] == 1 else 0)
-
-    display(img)
 
     print('1:', img.sum(), time.time() - t0, 's')
 
