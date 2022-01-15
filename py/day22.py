@@ -14,15 +14,12 @@ import re
 import fire
 
 
-def main(
-        #infile: str='test_input.txt',
-        infile: str = 'input.txt',
-):
+def main(infile: str):
     print('hi!')
 
     instructions = list()
 
-    with open(f'../inputs/day22/{infile}', 'r') as f:
+    with open(infile, 'r') as f:
         for i, line in enumerate(f.readlines()):
             # on x=-3..43,y=-28..22,z=-6..38
             pattern = r'^(.*?) x=(.*?)\.\.(.*?),y=(.*?)\.\.(.*),z=(.*?)\.\.(.*?)$'
