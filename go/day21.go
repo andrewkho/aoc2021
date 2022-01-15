@@ -52,12 +52,10 @@ func main() {
 	t1 := time.Now()
 	gameState := GameState{pos: init}
 	rolls := 0
-	player := 0
-	for gameState.score[0] < 1000 && gameState.score[1] < 1000 {
+	for player := 0; gameState.score[0] < 1000 && gameState.score[1] < 1000; player = 1-player {
 		dice := rolls % 100 + 1
 		gameState = gameState.move(player, 3*dice+3)
 		rolls += 3
-		player = 1 - player
 	}
 	t := util.Min(gameState.score[0], gameState.score[1])*rolls
 	fmt.Printf("1: %v, %v\n", t, time.Since(t1))
@@ -73,10 +71,9 @@ func main() {
 		}
 	}
 	var winners [2]int
-	player = 0
 	states := make(map[GameState]int)
 	states[GameState{pos: init}] = 1
-	for len(states) > 0 {
+	for player := 0; len(states) > 0; player = 1-player{
 		newStates := make(map[GameState]int)
 		for state, n := range states {
 			for i, m := range roller[3:] {
@@ -89,7 +86,6 @@ func main() {
 			}
 		}
 		states = newStates
-		player = 1 - player
 	}
 	t = util.Max(winners[0], winners[1])
 	fmt.Printf("2: %v, %v\n", t, time.Since(t2))
